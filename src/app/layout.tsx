@@ -1,6 +1,8 @@
+import { Toaster as SonnarToaster } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import ModalProvider from "@/providers/modal-provider";
 import { ThemeProvider } from "@/providers/theme-provider";
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -28,6 +30,7 @@ export default function RootLayout({
         >
           <ModalProvider>
             <Toaster />
+            <SonnarToaster />
             {children}
           </ModalProvider>
         </ThemeProvider>

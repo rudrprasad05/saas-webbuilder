@@ -17,6 +17,7 @@ import {
   ArrowLeftCircle,
   EyeIcon,
   Laptop,
+  Loader2,
   Redo2,
   Smartphone,
   Tablet,
@@ -24,7 +25,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { FocusEventHandler, useEffect } from "react";
+import React, { FocusEventHandler, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 type Props = {
@@ -39,6 +40,7 @@ const FunnelEditorNavigation = ({
   subaccountId,
 }: Props) => {
   const router = useRouter();
+  const [onSaveLoading, setOnSaveLoading] = useState(false);
   const { state, dispatch } = useEditor();
 
   useEffect(() => {
@@ -89,6 +91,7 @@ const FunnelEditorNavigation = ({
   };
 
   const handleOnSave = async () => {
+    setOnSaveLoading(true);
     const content = JSON.stringify(state.editor.elements);
     try {
       const response = await upsertFunnelPage(
@@ -107,6 +110,7 @@ const FunnelEditorNavigation = ({
       toast("Success", {
         description: "Saved Editor",
       });
+      setOnSaveLoading(false);
     } catch (error) {
       toast("Oppse!", {
         description: "Could not save editor",
@@ -231,7 +235,13 @@ const FunnelEditorNavigation = ({
               Last updated {funnelPageDetails.updatedAt?.toLocaleDateString()}
             </span>
           </div>
-          <Button onClick={handleOnSave}>Save</Button>
+          <Button
+            className="flex items-center w-16"
+            disabled={onSaveLoading}
+            onClick={handleOnSave}
+          >
+            {onSaveLoading ? <Loader2 className="animate-spin" /> : "Save"}
+          </Button>
         </aside>
       </nav>
     </TooltipProvider>
